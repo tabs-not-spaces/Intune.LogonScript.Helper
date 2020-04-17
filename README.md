@@ -1,5 +1,7 @@
 # Intune LogonScript Helper
 
+![Multi User Example](https://i.imgur.com/1Cl1ObR.gif)
+
 ## Summary
 
 A solution to help you solve a fairly simple task - giving access to On-prem file shares and printers based on security group membership of a user.
