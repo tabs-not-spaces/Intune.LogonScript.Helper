@@ -1,0 +1,102 @@
+# CI/CD Pipeline.
+# Deploy to UAT and validate the deployment was successful.
+# once successful, publish artifact and send to release for production approval and deployment
+
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - /function-app/aad-sec-grp-qry/drivemaps.json
+    exclude:
+      - /README.md
+      - /.gitignore
+
+variables:
+  - name: json.path
+    value: '$(System.DefaultWorkingDirectory)\function-app\aad-sec-grp-qry\drivemaps.json'
+  - name: schema.path
+    value: '$(System.DefaultWorkingDirectory)\drivemaps_schema.json'
+  - name: function.path
+    value: '$(System.DefaultWorkingDirectory)\function-app'
+
+stages:
+  - stage: build_tests
+    jobs:
+      - job: pester_test_json_validation
+        pool:
+          name: Hosted VS2017
+        steps:
+          - task: Npm@1
+            displayName: 'Install NPM'
+            inputs:
+              workingDir: '$(System.DefaultWorkingDirectory)'
+              verbose: false
+          - task: PowerShell@2
+            displayName: 'Run pester test'
+            inputs:
+              filePath: './tests/json.validate.ps1'
+              arguments: '-json $(json.path) -schema $(schema.path)'
+              pwsh: true
+          - task: PublishTestResults@2
+            displayName: 'Publish pester results'
+            inputs:
+              testResultsFormat: 'NUnit'
+              testResultsFiles: 'pester.json.test.xml'
+              searchFolder: '$(System.DefaultWorkingDirectory)/.tests'
+              failTaskOnFailedTests: true
+              testRunTitle: 'JSON Validation'
+
+  - stage: deploy_uat
+    dependsOn: build_tests
+    jobs:
+      - job: archive_and_deploy
+        pool:
+          name: Hosted VS2017
+        steps:
+          - task: ArchiveFiles@2
+            displayName: 'Package UAT deployment'
+            inputs:
+              rootFolderOrFile: '$(System.DefaultWorkingDirectory)/function-app'
+              includeRootFolder: false
+              archiveType: 'zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+              replaceExistingArchive: true
+
+          - task: AzureFunctionApp@1
+            displayName: Deploy to UAT slot
+            inputs:
+              azureSubscription: '' # the service connection to your function app
+              appType: 'functionApp'
+              appName: '' #your function app name
+              deployToSlotOrASE: true
+              resourceGroupName: '' # the resource group of your function app
+              slotName: 'UAT'
+              package: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+              deploymentMethod: 'auto'
+          - task: PublishPipelineArtifact@1
+            inputs:
+              targetPath: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+              artifact: 'deploy_$(Build.BuildId)'
+
+  - stage: uat_tests
+    dependsOn: deploy_uat
+    jobs:
+      - job: pester_test_uat_environment
+        pool:
+          name: Hosted VS2017
+        steps:
+          - task: PowerShell@2
+            displayName: 'Run pester test'
+            inputs:
+              filePath: './tests/uat.publish.ps1'
+              pwsh: true
+          - task: PublishTestResults@2
+            displayName: 'Publish pester results'
+            inputs:
+              testResultsFormat: 'NUnit'
+              testResultsFiles: 'pester.uat.test.xml'
+              searchFolder: '$(System.DefaultWorkingDirectory)/.tests'
+              failTaskOnFailedTests: true
+              testRunTitle: 'UAT Validation'

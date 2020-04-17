@@ -1,0 +1,192 @@
+{
+    "definitions": {},
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://example.com/root.json",
+    "type": "object",
+    "title": "The Root Schema",
+    "required": [
+        "drives",
+        "printers",
+        "printersToRemove"
+    ],
+    "properties": {
+        "drives": {
+            "$id": "#/properties/drives",
+            "type": "array",
+            "title": "The Drives Schema",
+            "items": {
+                "$id": "#/properties/drives/items",
+                "type": "object",
+                "title": "The Items Schema",
+                "required": [
+                    "group",
+                    "drives"
+                ],
+                "properties": {
+                    "group": {
+                        "$id": "#/properties/drives/items/properties/group",
+                        "type": "string",
+                        "title": "The Group Schema",
+                        "default": "",
+                        "examples": [
+                            "base"
+                        ],
+                        "pattern": "^(.*)$"
+                    },
+                    "drives": {
+                        "$id": "#/properties/drives/items/properties/drives",
+                        "type": "array",
+                        "title": "The Drives Schema",
+                        "items": {
+                            "$id": "#/properties/drives/items/properties/drives/items",
+                            "type": "object",
+                            "title": "The Items Schema",
+                            "required": [
+                                "driveLetter",
+                                "uncPath"
+                            ],
+                            "properties": {
+                                "driveLetter": {
+                                    "$id": "#/properties/drives/items/properties/drives/items/properties/driveLetter",
+                                    "type": "string",
+                                    "title": "The Driveletter Schema",
+                                    "default": "",
+                                    "examples": [
+                                        "M"
+                                    ],
+                                    "pattern": "^[a-zA-Z_]*$"
+                                },
+                                "uncPath": {
+                                    "$id": "#/properties/drives/items/properties/drives/items/properties/uncPath",
+                                    "type": "string",
+                                    "title": "The Uncpath Schema",
+                                    "default": "",
+                                    "examples": [
+                                        "\\\\server.corp.com\\sharedfolder"
+                                    ],
+                                    "pattern": "^(.*)$",
+                                    "format": "uri"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "printers": {
+            "$id": "#/properties/printers",
+            "type": "array",
+            "title": "The Printers Schema",
+            "items": {
+                "$id": "#/properties/printers/items",
+                "type": "object",
+                "title": "The Items Schema",
+                "required": [
+                    "group",
+                    "printers"
+                ],
+                "properties": {
+                    "group": {
+                        "$id": "#/properties/printers/items/properties/group",
+                        "type": "string",
+                        "title": "The Group Schema",
+                        "default": "",
+                        "examples": [
+                            "base"
+                        ],
+                        "pattern": "^(.*)$"
+                    },
+                    "printers": {
+                        "$id": "#/properties/printers/items/properties/printers",
+                        "type": "array",
+                        "title": "The Printers Schema",
+                        "items": {
+                            "$id": "#/properties/printers/items/properties/printers/items",
+                            "type": "object",
+                            "title": "The Items Schema",
+                            "required": [
+                                "server",
+                                "printer"
+                            ],
+                            "properties": {
+                                "server": {
+                                    "$id": "#/properties/printers/items/properties/printers/items/properties/server",
+                                    "type": "string",
+                                    "title": "The Server Schema",
+                                    "default": "",
+                                    "examples": [
+                                        "PRINTERSERVER.CORP.LOCAL"
+                                    ],
+                                    "pattern": "^(.*)$",
+                                    "format": "hostname"
+                                },
+                                "printer": {
+                                    "$id": "#/properties/printers/items/properties/printers/items/properties/printer",
+                                    "type": "string",
+                                    "title": "The Printer Schema",
+                                    "default": "",
+                                    "examples": [
+                                        "FollowMe-Anywhere-Printer"
+                                    ],
+                                    "pattern": "^(.*)$"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "printersToRemove": {
+            "$id": "#/properties/printersToRemove",
+            "type": "array",
+            "title": "The printersToRemove Schema",
+            "items": {
+                "$id": "#/properties/printersToRemove/items",
+                "type": "object",
+                "title": "The Items Schema",
+                "required": [
+                    "printers"
+                ],
+                "properties": {
+                    "printers": {
+                        "$id": "#/properties/printersToRemove/items/properties/printers",
+                        "type": "array",
+                        "title": "The Printers Schema",
+                        "items": {
+                            "$id": "#/properties/printersToRemove/items/properties/printers/items",
+                            "type": "object",
+                            "title": "The Items Schema",
+                            "required": [
+                                "server",
+                                "printer"
+                            ],
+                            "properties": {
+                                "server": {
+                                    "$id": "#/properties/printersToRemove/items/properties/printers/items/properties/server",
+                                    "type": "string",
+                                    "title": "The Server Schema",
+                                    "default": "",
+                                    "examples": [
+                                        "PRINTERSERVER.CORP.LOCAL"
+                                    ],
+                                    "pattern": "^(.*)$",
+                                    "format": "hostname"
+                                },
+                                "printer": {
+                                    "$id": "#/properties/printersToRemove/items/properties/printers/items/properties/printer",
+                                    "type": "string",
+                                    "title": "The Printer Schema",
+                                    "default": "",
+                                    "examples": [
+                                        "FollowMe-Anywhere-Printer"
+                                    ],
+                                    "pattern": "^(.*)$"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

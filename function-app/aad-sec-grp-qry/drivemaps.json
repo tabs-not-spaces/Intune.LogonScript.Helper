@@ -1,0 +1,54 @@
+{
+    "drives": [
+        {
+            "group": "BASE",
+            "drives": [
+                {
+                "uncPath": "\\\\powers-hell.com\\Shared",
+                "driveLetter": "S"
+            }
+        ]
+        },
+        {
+            "group": "SydneyOfficeA",
+            "drives": [{
+                "uncPath": "\\\\powers-hell.com\\SydneyOfficeA",
+                "driveLetter": "X"
+            }]
+        },
+        {
+            "group": "SydneyOfficeB",
+            "drives": [{
+                "uncPath": "\\\\powers-hell.com\\SydneyOfficeB",
+                "driveLetter": "X"
+            }]
+        }
+    ],
+    "printers": [
+        {
+            "group": "BASE",
+            "printers": [{
+                "server": "printserver.powers-hell.com",
+                "printer": "FollowMePrint"
+            }]
+        },
+        {
+            "group": "SydneyOfficeA",
+            "printers": [{
+                    "server": "printserver.powers-hell.com",
+                    "printer": "Printer1"
+                },
+                {
+                    "server": "printserver.powers-hell.com",
+                    "printer": "Printer2"
+                }
+            ]
+        }
+    ],
+    "printersToRemove": [{
+        "printers": [{
+            "server": "oldserver.corp",
+            "printer": "printerName123"
+        }]
+    }]
+}
