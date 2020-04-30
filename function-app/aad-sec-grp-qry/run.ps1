@@ -48,13 +48,13 @@ function Get-AuthHeader {
         scope         = "openid"
     }
     try {
-        $response = Invoke-RestMethod -Method post -Uri "https://login.microsoftonline.com/$tenant_id/oauth2/token" -Body $body -errMsgAction Stop
+        $response = Invoke-RestMethod -Method post -Uri "https://login.microsoftonline.com/$tenant_id/oauth2/token" -Body $body -ErrorAction Stop
         $headers = @{ }
         $headers.Add("Authorization", "Bearer " + $response.access_token)
         return $headers
     }
     catch {
-        Write-errMsg $_.Exception
+        Write-Error $_.Exception
     }
 }
 Function Get-JsonFromGraph {
@@ -82,7 +82,7 @@ Function Get-JsonFromGraph {
 
             #Invoke the Restful call and display content.
             Write-Verbose $url
-            $query = Invoke-RestMethod -Method Get -Headers $header -Uri $url -errMsgAction STOP
+            $query = Invoke-RestMethod -Method Get -Headers $header -Uri $url -ErrorAction STOP
             if ($query) {
                 if ($query.value) {
                     #multiple results returned. handle it
