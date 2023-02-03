@@ -137,7 +137,7 @@ if ($user) {
     $user
     $userId
     if ($userId) {
-        $groupQuery = "users/$userId/memberOf"
+        $groupQuery = "users/$userId/transitivememberOf"
         $groups = (Get-JsonFromGraph -token $token -strQuery $groupQuery -ver v1.0).displayName
     }
 
